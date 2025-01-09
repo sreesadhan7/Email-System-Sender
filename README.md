@@ -63,6 +63,157 @@ The confirmation email includes the user's name and email address and is sent us
           email VARCHAR2(255)
           );
 
+## Coding Description
+### Frontend: Temporary Email Confirmation (index.js)
+This HTML file serves as the frontend interface for the temporary email confirmation system. It uses AngularJS to create a dynamic web page that allows users to enter their name and email address and submit the information to the backend for processing.
+
+#### Key Features:
+- Form Inputs:
+  - A text input field for the user's name.
+  - An email input field for the user's email address.
+  - Both fields are required to ensure valid data submission.
+- AngularJS Integration:
+    - The AngularJS framework is used to bind the form inputs to the user object in the controller.
+    - The ng-submit directive triggers the saveUser() function to handle the form submission dynamically.
+- Feedback Display:
+    - A feedback message is displayed below the form using AngularJS data binding ({{ feedback }}), which updates dynamically based on the server's response.
+- Script Inclusions:
+    - Includes AngularJS via a CDN for dynamic functionality.
+    - Links the app.js file containing the AngularJS application logic.
+- How to Use:
+    - Open this HTML file in a web browser or serve it using a static server.
+    - Enter a valid name and email address in the respective input fields.
+    - Click the "Save & Send Email" button to submit the form.
+    - View the feedback message to confirm the operation's success or failure.
+ 
+### Frontend Logic: AngularJS Application (app.js)
+The `app.js` file contains the AngularJS logic for the Temporary Email Confirmation System. It defines the AngularJS module and controller that handle the dynamic behavior and interaction with the backend APIs.
+
+#### Key Features:
+- AngularJS Module:
+    - The emailApp module is defined using AngularJS's module system.
+    - This module serves as the foundation for the frontend application.
+- Controller:
+    - The EmailController manages the user input and feedback on the web page.
+    - The controller binds the user’s input (name and email) to the $scope.user object.
+- Form Submission Logic:
+  - Save User API:
+    - Calls the /api/saveUser endpoint to save the user’s information in the backend database.
+    - On success, updates the feedback message with a confirmation.
+  - Send Email API:
+    - Calls the /api/sendEmail endpoint to send a confirmation email to the user.
+    - On success, updates the feedback message with a success message for the email.
+- Error Handling:
+    - Captures any errors during API calls and displays a helpful error message to the user in the feedback section.
+    - Logs detailed error messages to the console for debugging.
+
+#### Alignment with HTML
+Your HTML file is correctly configured to work with the AngularJS code. Here's why:
+- AngularJS App Initialization:
+    - The `ng-app="emailApp"` directive initializes the AngularJS app defined in `app.js`.
+- Controller Scope:
+    - The `ng-controller="EmailController"` directive binds the `EmailController` to the `<body>` element, making all `$scope` variables and methods available within the `<body>`.
+- Form and Input Binding:
+    - The `ng-model="user.name"` and `ng-model="user.email"` directives bind the input fields to `$scope.user.name` and `$scope.user.email`.
+    - These bindings ensure the user object is correctly populated when the form is submitted.
+- Submit Button:
+    - The `ng-submit="saveUser()"` directive calls the `saveUser` function when the form is submitted.
+- Feedback Display:
+    - The `{{ feedback }}` binding dynamically displays the feedback message from `$scope.feedback`.
+ 
+#### Expected Behavior
+- When the form is submitted:
+    - The user data is sent to the `/api/saveUser` endpoint.
+    - If successful, a message like "User saved: User saved successfully" appears below the form.
+    - A subsequent email request is sent to `/api/sendEmail`.
+    - If successful, a message like "Email sent: Email sent successfully" replaces the previous feedback.
+- In case of an error:
+    - The `feedback` displays an error message like "An error occurred: [Error Details]."
+    - Detailed error logs appear in the browser's console.
+
+### Backend: Node.js Server (server.js)
+The `server.js` file is the backend server for the Temporary Email Confirmation System, built using Node.js and Express.js. This server handles saving user data to the Oracle database and sending confirmation emails.
+#### Key Features:
+- Save User API (`/api/saveUser`):
+    - Accepts user data (name and email) from the frontend.
+    - Inserts the data into an Oracle database.
+    - Returns a success or failure message to the frontend.
+    - Handles database errors gracefully, logging them to the console and sending an error response to the client.
+- Send Email API (`/api/sendEmail`):
+    - Accepts the user's name and email address.
+    - Sends a confirmation email using the Nodemailer library.
+    - Utilizes environment variables for SMTP configuration (via `dotenv`).
+    - Sends a plain text email with the user's name and email address for confirmation.
+    - Logs the email-sending status to the console and returns success or failure to the client.
+- Environment Variables (`.env`):
+    - Configurable SMTP settings (e.g., Mailtrap or other providers):
+        - SMTP_HOST: SMTP server host.
+        - SMTP_PORT: SMTP server port.
+        - SMTP_USER: SMTP authentication username.
+        - SMTP_PASS: SMTP authentication password.
+        - EMAIL_FROM: Sender email address for outgoing emails.
+- Defaults to Mailtrap values if environment variables are not provided.
+- Database Connection:
+    - Tests the connection to the Oracle database on server startup.
+    - Uses a reusable getConnection() function (imported from db-config.js) to establish a connection.
+- CORS Support:
+    - Allows cross-origin requests from the frontend using the cors middleware.
+- Static File Support:
+    - Configured to serve static files (if needed) using express.static().
+- Logging and Debugging:
+    - Logs API calls and important operations (e.g., database queries and email-sending) to the console for easier debugging.
+
+#### How It Works:
+- Save User:
+    - Frontend sends a POST request to `/api/saveUser` with user data (`name` and `email`).
+    - Backend inserts the user data into the Oracle database and responds with success or failure.
+- Send Email:
+    - Frontend sends a POST request to `/api/sendEmail` with user data (`name` and `email`).
+    - Backend sends a confirmation email using the SMTP server and responds with success or failure.
+
+#### Dependencies:
+- Express.js: For building the REST API.
+- Body-parser: For parsing incoming JSON requests.
+- Nodemailer: For sending emails via SMTP.
+- Cors: For handling cross-origin requests.
+- dotenv: For managing environment variables.
+- Oracle Database Driver (`oracledb`): For connecting to Oracle DB.
+
+REST APIs are used in your server.js file to handle communication between the frontend and the backend. Here’s how REST principles are applied in your code:
+- Endpoints in Your Code:
+    - `/api/saveUser`: A `POST` endpoint to save user data in the database.
+    - `/api/sendEmail`: A `POST` endpoint to send a confirmation email.
+- HTTP Methods:
+    - POST:
+        - Used for creating resources (e.g., saving user data in the database).
+        - In your case, both endpoints use `POST` because they involve data submission:
+            - `/api/saveUser` creates a database entry for the user.
+            - `/api/sendEmail` triggers an action to send an email.
+
+### Database Configuration:`db-config.js`
+The `db-config.js` file manages the connection to the Oracle Database used by the Temporary Email Confirmation System. This file leverages the `oracledb` package to establish and maintain a connection with the Oracle database using credentials and connection details stored in environment variables.
+
+#### Key Features
+- Database Configuration:
+    - The configuration object (`dbConfig`) retrieves the database connection details from environment variables for security and flexibility:
+        - `DB_USER`: The Oracle database username.
+        - `DB_PASS`: The Oracle database password.
+        - `DB_CONNECT_STRING`: The connection string (e.g., `hostname:port/service_name`).
+- Environment Variables:
+    - Uses the `dotenv` package to load database credentials and connection details from a `.env` file at runtime.
+    - Example .env file:
+
+          DB_USER=your_database_username
+          DB_PASS=your_database_password
+          DB_CONNECT_STRING=your_host:your_port/your_service_name
+- Reusable Connection Function:
+    - Provides an `async` function, `getConnection()`, to establish a connection with the Oracle database.
+    - Logs a success message when the connection is established or an error message if the connection fails.
+    - The function ensures modularity and reusability by centralizing the database connection logic.
+- Error Handling:
+    - Captures and logs any errors that occur during the database connection process.
+    - Throws the error so that it can be appropriately handled by the caller (e.g., in `server.js`).
+
 ## How to Run the Project
 1) Start the Backend
     - Run the Node.js server:
