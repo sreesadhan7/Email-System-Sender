@@ -1,0 +1,23 @@
+<!-- Frontend -->
+
+<!DOCTYPE html>
+<html lang="en" ng-app="emailApp">
+<head>
+  <title>Temporary Email Confirmation</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+</head>
+<body ng-controller="EmailController">
+  <h2>Temporary Email System</h2>
+  <form ng-submit="saveUser()" novalidate>
+    <label>Name:</label>
+    <input type="text" ng-model="user.name" required />
+    <br />
+    <label>Email:</label>
+    <input type="email" ng-model="user.email" required />
+    <br />
+    <button type="submit">Save & Send Email</button>
+    <p>{{ feedback }}</p>
+</form>
+</body>
+</html>
