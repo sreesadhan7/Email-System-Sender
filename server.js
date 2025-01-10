@@ -1,18 +1,18 @@
 // Node.js Backend to save user data to Oracle DB and send confirmation email
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
-const cors = require('cors');
-require('dotenv').config(); // Load environment variables
+const express = require('express'); // Framework for creating the backend server and defining routes.
+const bodyParser = require('body-parser'); // Parses incoming JSON and URL-encoded requests into `req.body`.
+const nodemailer = require('nodemailer'); // Sends confirmation emails to users.
+const cors = require('cors'); // Enables cross-origin resource sharing (if your frontend and backend are hosted on different origins).
+require('dotenv').config(); // Loads environment variables from a `.env` file.
 const { getConnection } = require('./db-config'); // Import Oracle DB connection
 
 const app = express();
 
-app.use(cors()); // CORS middleware to allow cross-origin requests 
-app.use(bodyParser.json());
+app.use(cors()); // Enable CORS for API requests.
+app.use(bodyParser.json()); // Parse JSON bodies from client requests.
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded body
-app.use(express.static('public')); // Serve static files (if needed)
+app.use(express.static('public')); // Serve static files (e.g., `index.html` and `app.js`).
 
 // Save User API
 app.post('/api/saveUser', async (req, res) => {
@@ -24,7 +24,7 @@ app.post('/api/saveUser', async (req, res) => {
         const connection = await getConnection();
         const sql = `INSERT INTO users (name, email) VALUES (:name, :email)`;
         const binds = { name, email };
-        await connection.execute(sql, binds, { autoCommit: true });
+        await connection.execute(sql, binds, { autoCommit: true }); // Save user to DB.
         await connection.close();
         console.log('User saved successfully');
         res.send('User saved successfully');

@@ -65,6 +65,8 @@ The confirmation email includes the user's name and email address and is sent us
 
 ## Project Walkthrough Demo Video
 
+https://github.com/user-attachments/assets/bd1cb9f4-4158-4ba2-b3af-2bc345eb3f46
+
 ## Coding Description
 ### Frontend: Temporary Email Confirmation (index.js)
 This HTML file serves as the frontend interface for the temporary email confirmation system. It uses AngularJS to create a dynamic web page that allows users to enter their name and email address and submit the information to the backend for processing.
