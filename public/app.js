@@ -9,13 +9,13 @@ app.controller('EmailController', function ($scope, $http) {
         console.log('Submitting user:', $scope.user);
 
         // Save User API Call
-        $http.post('/api/saveUser', $scope.user)
+        $http.post('http://localhost:3000/api/saveUser', $scope.user)
             .then(response => {
                 $scope.feedback = 'User saved: ' + response.data;
                 console.log('Save user response:', response.data);
 
                 // Send Email API Call
-                return $http.post('/api/sendEmail', $scope.user);
+                return $http.post('http://localhost:3000/api/sendEmail', $scope.user);
             })
             .then(response => {
                 $scope.feedback = 'Email sent: ' + response.data;

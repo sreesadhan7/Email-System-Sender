@@ -63,6 +63,8 @@ The confirmation email includes the user's name and email address and is sent us
           email VARCHAR2(255)
           );
 
+## Project Walkthrough Demo Video
+
 ## Coding Description
 ### Frontend: Temporary Email Confirmation (index.js)
 This HTML file serves as the frontend interface for the temporary email confirmation system. It uses AngularJS to create a dynamic web page that allows users to enter their name and email address and submit the information to the backend for processing.
@@ -221,11 +223,23 @@ The `db-config.js` file manages the connection to the Oracle Database used by th
            node server.js
     - The server will start on port 3000.
     - APIs will be available at http://localhost:3000.
+![image](https://github.com/user-attachments/assets/5ef53102-8cbb-4dce-bbb6-1f9efe80680e)
+
 2) Open the Frontend
     - Place the index.html file in the public/ directory.
     - Access the frontend in your browser at:
 
           http://localhost:3000/index.html
+![image](https://github.com/user-attachments/assets/cf4ed64f-cafb-47af-9fa1-140316292dc4)
+
+3) Data stored in Database
+   
+![image](https://github.com/user-attachments/assets/f30631fe-c214-4bf4-9175-cf4f272ca304)
+
+5) Email Confirmation
+   
+![image](https://github.com/user-attachments/assets/5fc64916-09bc-4740-b1b6-14caad1686a9)
+
 
 ## How to Test
 1) Submit Data
@@ -240,10 +254,10 @@ The `db-config.js` file manages the connection to the Oracle Database used by th
     - Open the inbox associated with your Mailtrap credentials to verify email delivery.
 
 ## File Structure
-    email-system-sender/
+    Email-System-Sender/
     ├── public/
-    │   └── index.html         # Frontend HTML file
-    ├── app.js                 # AngularJS logic
+    │   ├── index.html         # Frontend HTML file
+    │   ├── app.js             # AngularJS logic
     ├── server.js              # Backend server
     ├── db-config.js           # MySQL database configuration
     ├── .env                   # Environment variables

@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cors()); // CORS middleware to allow cross-origin requests 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded body
 app.use(express.static('public')); // Serve static files (if needed)
 
 // Save User API
@@ -25,6 +26,7 @@ app.post('/api/saveUser', async (req, res) => {
         const binds = { name, email };
         await connection.execute(sql, binds, { autoCommit: true });
         await connection.close();
+        console.log('User saved successfully');
         res.send('User saved successfully');
     } catch (err) {
         console.error('Error saving user:', err.message);
@@ -57,6 +59,8 @@ app.post('/api/sendEmail', async (req, res) => {
           text: `Hello ${name},\n\nYour email address (${email}) has been successfully saved!\n\nBest regards,\nTeam`, // Email content
       };
 
+    //   console.log('Mail options:', mailOptions);
+
       const info = await transporter.sendMail(mailOptions);
 
       console.log('Message sent: %s', info.messageId);
@@ -66,7 +70,6 @@ app.post('/api/sendEmail', async (req, res) => {
       res.status(500).send(`Failed to send email: ${error.message}`);
   }
 });
-
 
 // Test Database Connection
 (async () => {
